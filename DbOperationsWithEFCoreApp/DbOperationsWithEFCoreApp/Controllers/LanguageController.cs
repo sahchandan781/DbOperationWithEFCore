@@ -23,10 +23,18 @@ namespace DbOperationsWithEFCoreApp.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetLanguageById([FromRoute] int id)
         {
             var result = await appDbContext.Languages.FindAsync(id);
+            return Ok(result);
+        }
+
+
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetLanguageByName([FromRoute] string name)
+        {
+            var result = await appDbContext.Languages.Where(x => x.Title == name).FirstOrDefaultAsync();
             return Ok(result);
         }
     }
