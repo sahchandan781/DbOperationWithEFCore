@@ -20,6 +20,18 @@ namespace DbOperationsWithEFCoreApp.Controllers
             return Ok(model);
         }
 
+        [HttpPost("bulk")]
+        public async Task<IActionResult> AddBooks([FromBody] List<Book> model)
+        {
+            // Validate model
+            if (model == null || model.Count == 0)
+            {
+                return BadRequest("Book list cannot be empty.");
+            }
+            appDbContext.Books.AddRange(model);
+            await appDbContext.SaveChangesAsync();
+            return Ok(model);
+        }
 
         [HttpGet()]
         public async Task<IActionResult> GeAllBooks()
