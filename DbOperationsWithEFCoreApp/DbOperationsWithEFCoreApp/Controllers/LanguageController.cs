@@ -37,5 +37,16 @@ namespace DbOperationsWithEFCoreApp.Controllers
             var result = await appDbContext.Languages.Where(x => x.Title == name).FirstOrDefaultAsync();
             return Ok(result);
         }
+
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetLanguagesFroMList()
+        {
+            var ids= new List<int> { 1, 2, 3 };
+            var result = await appDbContext.Languages.Where(x => ids.Contains(x.LanguageId)).ToListAsync();
+
+            return Ok(result);
+        }
+        
     }
 }
