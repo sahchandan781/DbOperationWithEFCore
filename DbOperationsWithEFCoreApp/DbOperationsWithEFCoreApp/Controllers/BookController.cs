@@ -21,6 +21,12 @@ namespace DbOperationsWithEFCoreApp.Controllers
         }
 
 
+        [HttpGet()]
+        public async Task<IActionResult> GeAllBooks()
+        {
+            var result = await appDbContext.Books.ToListAsync();
+            return Ok(result);
+        }
 
     }
 }
