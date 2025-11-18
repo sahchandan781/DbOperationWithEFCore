@@ -72,15 +72,19 @@ namespace DbOperationsWithEFCoreApp.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBookById([FromRoute] int id)
+        [HttpDelete("bulk")]
+        public async Task<IActionResult> DeleteBookById()
         {
 
-            var book = new Book { Id = id };
+            var books = await appDbContext.Books.Where(x => x.Id < 5).ToListAsync();
+            appDbContext.Books.RemoveRange(books);
+            appDbContext.SaveChanges();
 
-            appDbContext.Entry(book).State = EntityState.Deleted;
+            //var book = new Book { Id = id };
 
-            await appDbContext.SaveChangesAsync();
+            //appDbContext.Entry(book).State = EntityState.Deleted;
+
+            //await appDbContext.SaveChangesAsync();
             //var book = await appDbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
             //if(book == null)
             //{
@@ -91,7 +95,7 @@ namespace DbOperationsWithEFCoreApp.Controllers
             //appDbContext.Books.Remove(book);
             //await appDbContext.SaveChangesAsync();
 
-            return Ok(book);
+            return Ok(books);
         }
 
     }
