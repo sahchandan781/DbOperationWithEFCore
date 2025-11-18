@@ -63,5 +63,30 @@ namespace DbOperationsWithEFCoreApp.Controllers
             return Ok(model);
         }
 
+
+        [HttpPut("bulk")]
+        public async Task<IActionResult> UpdateBooks()
+        {
+            await appDbContext.Books.Where(x => x.NoOfPages == 0)
+                .ExecuteUpdateAsync(x => x.SetProperty(p => p.NoOfPages, p => p.NoOfPages + 100));
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBookById([FromRoute] int id)
+        {
+            var book = await appDbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
+            if(book == null)
+            {
+                return NotFound();
+
+            }
+
+            appDbContext.Books.Remove(book);
+            await appDbContext.SaveChangesAsync();
+
+            return Ok(book);
+        }
+
     }
 }
